@@ -1,7 +1,24 @@
-import Fastify from "fastify";
+import Fastify, { FastifyReply, FastifyRequest } from "fastify";
+import fjwt from '@fastify/jwt';
 import userRoutes from "./modules/user/user.route";
+import { useSchemas } from "./modules/user/user.schema";
 
 const server = Fastify();
+
+server.register(fjwt, {
+    secret: '4rtsfxgwy97qd327t2y022q8ft832td082'
+})
+
+server.decorate(
+    "auth", 
+    async (request:FastifyRequest, reply: FastifyReply) => {
+        try {
+            await request.jwtVerify()
+        } catch (e) {
+          return reply.send(e)  
+        }
+    }
+)
 
 
 server.get("/healthcheck", async () => {
@@ -9,7 +26,9 @@ server.get("/healthcheck", async () => {
 })
 
 async function main(){
-
+    for (const schema of useSchemas) {
+        server.addSchema(schema)
+    }
     server.register(userRoutes, { prefix: 'api/users'})
 
     try{

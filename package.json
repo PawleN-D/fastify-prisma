@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/fastify-jwt": "^0.8.1",
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@fastify/jwt": "^8.0.0",
     "@prisma/client": "^5.9.0",
     "@types/node": "^20.11.15",
     "fastify": "^4.26.0",
